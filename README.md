@@ -1,27 +1,64 @@
-# Express Boilerplate!
+# Ducklings Care Diary Server
 
-This is a boilerplate project used for starting new projects!
+## Table of Contents
 
-## Set up
+1. [Description](#Description)
+1. [API](#API)
+1. [Technologies](#Technologies)
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+[Live App](https://ducklings-care-diary.beckibloom.now.sh/)
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-    (you may need to also `npm i nodemon -D` as nodemon has a history of not installing properly...)
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+## Description
 
-## Scripts
+Sending home classroom reports on paper can create quite a hassle. Ducklings Care Diary would like to introduce a new way to keep notes on each of your students all in one place, and give parents access to view their student reports and progress.
 
-Start the application `npm start`
+Teachers are able to create their class and register their students, maintaining a diary for each student containing notes on their activities or progress each day.
 
-Start nodemon for the application `npm run dev`
+After parents have been entered by the teacher, parents can view their student's diary and see their growth based on the teacher's notes over time.
 
-Run the tests `npm test`
+> View the Client Repo for Activities Assistant [here](https://github.com/beckibloom/ducklings-care-diary-client)
 
-## Deploying
+## API - UPDATE ENDPOINTS
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+```
+
+/api
+.
+--/activities
+  --GET
+    -/:org_id
+    -/:org_id/:activity_id
+  --DELETE
+    -/:org_id/:activity_id
+  --PUT
+    -/:org_id/:activity_id
+  --POST
+    -/:org_id
+--/auth
+    --POST
+      -/login
+--/orgs
+    --GET
+      -/
+    --POST
+      -/
+--/users
+    --GET
+      -/orgID
+      -/:username
+    --POST
+      -/:org_id
+
+```
+
+## Technologies
+
+- React
+- HTML
+- CSS
+- Node
+- Express
+- PostgreSQL
+- Mocha/Chai/Jest
+- Heroku/Now CLI
+- Zeit
