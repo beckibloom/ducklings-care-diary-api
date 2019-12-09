@@ -1,5 +1,4 @@
 const express = require('express');
-// const path = require('path');
 const StudentsService = require('./students-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
@@ -37,16 +36,42 @@ studentsRouter
       .then(student => {
         res
           .status(201)
-          // .location(path.posix.join())
           .json(StudentsService.serializeStudent(student));
       })
       .catch(next);
   });
-  
-// GET profile data for specified student ('/:teacher_id/:student_id')
 
-// PUT (update) profile for one specific student ('/:teacher_id/:student_id')
+studentsRouter
+  .route('/:teacher_id/:student_id')
+  .all(requireAuth)
+  .all(checkStudentExists)
+  // GET profile data for specified student ('/:teacher_id/:student_id')
+  .get((req,res) => {
+    res.status(201).json(StudentsService.serializeStudent(res.student));
+  })
+  // PUT (update) profile for one specific student ('/:teacher_id/:student_id')
+  .put()
+  // DELETE one specific student ('/:teacher_id/:student_id')
+  .delete()
 
-// DELETE one specific student ('/:teacher_id/:student_id')
+async function checkStudentExists(req, res, next) {
+  try {
+    const student = await StudentsService.getByStudentId(
+      req.app.get('db'),
+      req.params.student_id
+    );
+
+    if(!student) {
+      return res.status(404).json({
+        error: `Student doesn't exist`
+      });
+    };
+
+    res.student = student;
+    next();
+  } catch (error) {
+    next(error);
+  };
+};
 
 module.exports = studentsRouter;
