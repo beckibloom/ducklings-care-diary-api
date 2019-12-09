@@ -4,6 +4,7 @@ const StudentsService = {
   getStudentsByTeacherId(db, teacher_id) {
     return db
       .select('*')
+      .where({teacher_id})
       .from('students')
   },
 
@@ -43,6 +44,11 @@ const StudentsService = {
       .update(updatedFields)
   },
 
+  deleteStudent(db, student_id) {
+    return db('students')
+      .where('id', student_id)
+      .delete();
+  }
 };
 
 module.exports = StudentsService;

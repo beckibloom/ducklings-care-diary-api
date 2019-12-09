@@ -10,9 +10,7 @@ studentsRouter
   .all(requireAuth)
   // GET all students assigned to the specified teacher ('/:teacher_id')
   .get(jsonBodyParser, (req,res,next) => {
-    const teacherId = parseInt(req.params.teacher_id);
-    console.log({teacherId});
-    StudentsService.getStudentsByTeacherId(req.app.get('db'), req.params.teacher_id)
+    StudentsService.getStudentsByTeacherId(req.app.get('db'), teacherId)
       .then(students => {
         res.status(200).json(students);
       })
@@ -70,8 +68,18 @@ studentsRouter
         res.status(204).end();
       })
       .catch(next);
-  });
+  })
   // DELETE one specific student ('/:teacher_id/:student_id')
+  .delete((req,res,next) => {
+    StudentsService.deleteStudent(
+      req.app.get('db'),
+      req.params.student_id
+    )
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
+  })
 
 async function checkStudentExists(req, res, next) {
   try {

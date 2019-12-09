@@ -20,7 +20,7 @@ let authToken;
 
 const authenticatedUser = request.agent(app);
 
-describe(`Students Endpoint`, () => {
+describe.only(`Students Endpoint`, () => {
 
   before((done) => {
     authenticatedUser
@@ -87,7 +87,7 @@ describe(`Students Endpoint`, () => {
           .expect(200, expectedStudent)
       });
     });
-    describe.only('PUT /:teacher_id/:student_id', () => {
+    describe('PUT /:teacher_id/:student_id', () => {
       let studentId;
       //must only interact with teacher_id 8
       before((done) => {
@@ -114,6 +114,27 @@ describe(`Students Endpoint`, () => {
           .send(updatedStudent)
           .expect(204)
       })
+    });
+    describe('DELETE /:teacher_id/:student_id', () => {
+      let studentIdToDelete;
+
+      //must only interact with teacher_id 8
+      before((done) => {
+        authenticatedUser
+          .set('authorization', `bearer ${authToken}`)
+          .get('/api/students/8')
+          .then((response) => {
+            studentIdToDelete = response.body[0].id;
+            done();
+          });
+      });    
+      
+      it('responds with status 204 and activity is no longer in database', () => {
+        return authenticatedUser
+          .set('authorization', `bearer ${authToken}`)
+          .delete(`/api/students/8/${studentIdToDelete}`)
+          .expect(204)
+      });
     });
   });
 });
