@@ -18,7 +18,7 @@ authRouter
 
     AuthService.getUserWithUserName(
       req.app.get('db'),
-      loginUser.user_name
+      loginUser.username
     )
       .then(dbUser => {
         if (!dbUser) {
@@ -35,7 +35,7 @@ authRouter
               });
             };
 
-            const sub = dbUser.user_name;
+            const sub = dbUser.username;
             const payload = { user_id: dbUser.id };
             res.send({
               authToken: AuthService.createJwt(sub, payload),
