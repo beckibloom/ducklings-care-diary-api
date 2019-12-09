@@ -4,15 +4,18 @@ const StudentsService = require('./students-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 const studentsRouter = express.Router();
-// const jsonBodyParser = express.json();
+const jsonBodyParser = express.json();
 
 studentsRouter
   .route('/:teacher_id')
+  .all(requireAuth)
   // GET all students assigned to the specified teacher ('/:teacher_id')
-  .get(requireAuth, (req,res,next) => {
+  .get(jsonBodyParser, (req,res,next) => {
+    const teacherId = parseInt(req.params.teacher_id);
+    console.log({teacherId});
     StudentsService.getStudentsByTeacherId(req.app.get('db'), req.params.teacher_id)
       .then(students => {
-        res.status(200).json(students.map(StudentsService.serializeStudent));
+        res.status(200).json(students);
       })
     .catch(next);
   })

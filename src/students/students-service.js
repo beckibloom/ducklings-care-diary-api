@@ -1,18 +1,10 @@
 const xss = require('xss');
 
 const StudentsService = {
-  getStudentsByTeacher(db, teacher_id) {
+  getStudentsByTeacherId(db, teacher_id) {
     return db
+      .select('*')
       .from('students')
-      .select(
-        'id',
-        'teacher_id',
-        'student_first',
-        'student_last',
-        'birth_date',
-        'parent_email'
-      )
-      .where('teacher_id', teacher_id);
   },
 
   serializeStudent(student) {
