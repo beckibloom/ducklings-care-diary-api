@@ -32,7 +32,7 @@ describe(`Students Endpoint`, () => {
       })
   })
 
-  describe.only('GET /:teacher_id', () => {
+  describe('GET /:teacher_id', () => {
     it('responds with 200 and all students associated with the teacher_id', () => {
       const teacherId = 5;
       const expectedStudents = helpers.makeExpectedStudents();
@@ -46,4 +46,23 @@ describe(`Students Endpoint`, () => {
 
     });
   });
+
+  //POST request tests should ONLY interact with teacher_id 5 (teacher@email.com)
+  describe('POST /:teacher_id', () => {
+    it('responds with 201 and the posted student', () => {
+      const teacherId = 5;
+      return authenticatedUser
+        .set('authorization', `bearer ${authToken}`)
+        .post(`/api/students/${teacherId}`)
+        .send({
+          teacher_id: teacherId,
+          student_first: "Test",
+          student_last: "Student",
+          birth_date: "01/13/1992",
+          parent_email: "testparent@testparent.test"
+        })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(201)
+    });
+  })
 });
