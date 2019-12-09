@@ -16,7 +16,27 @@ const StudentsService = {
       birth_date: xss(student.birth_date),
       parent_email: xss(student.parent_email),
     }
-  }
-}
+  },
+
+  insertStudent(db, newStudent) {
+    return db
+      .insert(newStudent)
+      .into('students')
+      .returning('*')
+      .then(([student]) => student)
+      .then(student => 
+        StudentsService.getByStudentId(db, student.id)
+      );
+  },
+
+  getByStudentId(db, student_id) {
+    return db
+      .from('students')
+      .select('*')
+      .where('id', student_id)
+      .first();
+  },
+  
+};
 
 module.exports = StudentsService;

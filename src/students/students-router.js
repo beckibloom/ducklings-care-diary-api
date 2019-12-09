@@ -19,8 +19,30 @@ studentsRouter
       })
     .catch(next);
   })
-// POST a new student assigned to the specified teacher ('/:teacher_id')
+  // POST a new student assigned to the specified teacher ('/:teacher_id')
+  .post(jsonBodyParser, (req,res,next) => {
+    const { teacher_id, student_first, student_last, birth_date, parent_email } = req.body;
+    const newStudent = { teacher_id, student_first, student_last, birth_date, parent_email }
 
+    for (const [key, value] of Object.entries(newStudent))
+    if (value == null) {
+      return res.status(400).json({
+        error: `Missing '${key}' in request body`
+      });
+    };
+
+    StudentsService.insertStudent(
+      req.app.get('db'), newStudent
+    )
+      .then(student => {
+        res
+          .status(201)
+          // .location(path.posix.join())
+          .json(StudentsService.serializeStudent(student));
+      })
+      .catch(next);
+  });
+  
 // GET profile data for specified student ('/:teacher_id/:student_id')
 
 // PUT (update) profile for one specific student ('/:teacher_id/:student_id')
