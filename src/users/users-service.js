@@ -18,7 +18,7 @@ const UsersService = {
       .then(([user]) => user);
   },
   validateType(type) {
-    if (type !== 'parent' || type !== 'teacher') {
+    if (type !== 'parent' && type !== 'teacher') {
       return `Type must be either 'parent' or 'teacher'`
     }
   },
