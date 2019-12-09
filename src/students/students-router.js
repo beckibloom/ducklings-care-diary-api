@@ -47,7 +47,7 @@ studentsRouter
   .all(checkStudentExists)
   // GET profile data for specified student ('/:teacher_id/:student_id')
   .get((req,res) => {
-    res.status(201).json(StudentsService.serializeStudent(res.student));
+    res.status(200).json(StudentsService.serializeStudent(res.student));
   })
   // PUT (update) profile for one specific student ('/:teacher_id/:student_id')
   .put()

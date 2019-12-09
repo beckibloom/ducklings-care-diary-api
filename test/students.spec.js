@@ -32,37 +32,59 @@ describe(`Students Endpoint`, () => {
       })
   })
 
-  describe('GET /:teacher_id', () => {
-    it('responds with 200 and all students associated with the teacher_id', () => {
-      const teacherId = 5;
-      const expectedStudents = helpers.makeExpectedStudents();
+  context('Interacting with all students belonging to a teacher_id', () => {
+    describe('GET /:teacher_id', () => {
+      it('responds with 200 and all students associated with the teacher_id', () => {
+        const teacherId = 5;
+        const expectedStudents = helpers.makeExpectedStudents();
 
-      return authenticatedUser
-        .set('Authorization', `bearer ${authToken}`)
-        .set('Content-Type', 'application/json')
-        .get(`/api/students/${teacherId}`)
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(200, expectedStudents)
+        return authenticatedUser
+          .set('Authorization', `bearer ${authToken}`)
+          .set('Content-Type', 'application/json')
+          .get(`/api/students/${teacherId}`)
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(200, expectedStudents)
 
+      });
+    });
+
+    //POST request tests should ONLY interact with teacher_id 5 (teacher@email.com)
+    describe('POST /:teacher_id', () => {
+      it('responds with 201 and the posted student', () => {
+        const teacherId = 5;
+        return authenticatedUser
+          .set('authorization', `bearer ${authToken}`)
+          .post(`/api/students/${teacherId}`)
+          .send({
+            teacher_id: teacherId,
+            student_first: "Test",
+            student_last: "Student",
+            birth_date: "01/13/1992",
+            parent_email: "testparent@testparent.test"
+          })
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(201)
+      });
     });
   });
 
-  //POST request tests should ONLY interact with teacher_id 5 (teacher@email.com)
-  describe('POST /:teacher_id', () => {
-    it('responds with 201 and the posted student', () => {
-      const teacherId = 5;
-      return authenticatedUser
-        .set('authorization', `bearer ${authToken}`)
-        .post(`/api/students/${teacherId}`)
-        .send({
-          teacher_id: teacherId,
-          student_first: "Test",
-          student_last: "Student",
-          birth_date: "01/13/1992",
-          parent_email: "testparent@testparent.test"
-        })
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(201)
-    });
-  })
+  context('Interacting with a single student', () => {
+    describe.only('GET /:teacher_id/:student_id', () => {
+      it('responds with 200 and the expected student', () => {
+        const expectedStudent = {
+          id: 21,
+          teacher_id: 5,
+          student_first: 'Charlie',
+          student_last: 'Jarvis',
+          birth_date: '11/19/2016',
+          parent_email: 'newparent@email.com'
+        }
+        return authenticatedUser
+          .set('authorization', `bearer ${authToken}`)
+          .get(`/api/students/${expectedStudent.teacher_id}/${expectedStudent.id}`)
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(200, expectedStudent)
+      })
+    })
+  });
 });
