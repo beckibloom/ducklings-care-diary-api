@@ -34,6 +34,7 @@ describe(`Students Endpoint`, () => {
 
   context('Interacting with all students belonging to a teacher_id', () => {
     describe('GET /:teacher_id', () => {
+      //should only interact with teacherId 5
       it('responds with 200 and all students associated with the teacher_id', () => {
         const teacherId = 5;
         const expectedStudents = helpers.makeExpectedStudents();
@@ -48,10 +49,10 @@ describe(`Students Endpoint`, () => {
       });
     });
 
-    //POST request tests should ONLY interact with teacher_id 5 (teacher@email.com)
+    //POST request tests should ONLY interact with teacher_id 8 (newteacher@email.com)
     describe('POST /:teacher_id', () => {
       it('responds with 201 and the posted student', () => {
-        const teacherId = 5;
+        const teacherId = 8;
         return authenticatedUser
           .set('authorization', `bearer ${authToken}`)
           .post(`/api/students/${teacherId}`)
@@ -69,7 +70,7 @@ describe(`Students Endpoint`, () => {
   });
 
   context('Interacting with a single student', () => {
-    describe.only('GET /:teacher_id/:student_id', () => {
+    describe('GET /:teacher_id/:student_id', () => {
       it('responds with 200 and the expected student', () => {
         const expectedStudent = {
           id: 21,
@@ -84,7 +85,35 @@ describe(`Students Endpoint`, () => {
           .get(`/api/students/${expectedStudent.teacher_id}/${expectedStudent.id}`)
           .expect('Content-Type', 'application/json; charset=utf-8')
           .expect(200, expectedStudent)
+      });
+    });
+    describe.only('PUT /:teacher_id/:student_id', () => {
+      let studentId;
+      //must only interact with teacher_id 8
+      before((done) => {
+        authenticatedUser
+          .set('authorization', `bearer ${authToken}`)
+          .get('/api/students/8')
+          .then((response) => {
+            studentId = response.body[0].id;
+            done();
+          });
+      });
+
+      it('responds with status 204 and student has been successfully modified', () => {
+        const updatedStudent = {
+          student_first: 'newName',
+          student_last: 'testPut',
+          birth_date: '00/00/0000',
+          parent_email: 'newparent@testput.com'
+        }
+
+        return authenticatedUser
+          .set('authorization', `bearer ${authToken}`)
+          .put(`/api/students/8/${studentId}`)
+          .send(updatedStudent)
+          .expect(204)
       })
-    })
+    });
   });
 });
