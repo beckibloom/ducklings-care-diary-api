@@ -36,7 +36,13 @@ const StudentsService = {
       .where('id', student_id)
       .first();
   },
-  
+
+  updateStudent(db, student_id, updatedFields) {
+    return db('students')
+      .where('id', student_id)
+      .update(updatedFields)
+  },
+
 };
 
 module.exports = StudentsService;

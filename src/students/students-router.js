@@ -50,9 +50,28 @@ studentsRouter
     res.status(200).json(StudentsService.serializeStudent(res.student));
   })
   // PUT (update) profile for one specific student ('/:teacher_id/:student_id')
-  .put()
+  .put(jsonBodyParser, (req,res,next) => {
+    const { student_first, student_last, birth_date, parent_email } = req.body;
+    const studentToUpdate = { student_first, student_last, birth_date, parent_email }
+
+    const numberOfValues = Object.values(studentToUpdate).filter(Boolean).length;
+    if (numberOfValues === 0) {
+      return res.status(400).json({
+        error: { message: `Request body must contain an student object value to update` }
+      });
+    };
+
+    StudentsService.updateStudent(
+      req.app.get('db'),
+      req.params.student_id,
+      studentToUpdate
+    )
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
+  });
   // DELETE one specific student ('/:teacher_id/:student_id')
-  .delete()
 
 async function checkStudentExists(req, res, next) {
   try {
