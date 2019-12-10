@@ -1,6 +1,6 @@
 const express = require('express');
 const UsersService = require('./users-service');
-const requireAuth = require('../middleware/jwt-auth');
+const {requireAuth} = require('../middleware/jwt-auth');
 
 const usersRouter = express.Router();
 const jsonBodyParser = express.json();
@@ -56,13 +56,13 @@ usersRouter
     })
     .catch(next);
   })
-  // .get('/data', requireAuth, jsonBodyParser, (req,res,next) => {
-  //   const type = req.user.type;
-  //   const id = req.user.id;
+  .get('/data', requireAuth, jsonBodyParser, (req,res,next) => {
+    const type = req.user.type;
+    const id = req.user.id;
 
-  //   res
-  //     .status(200)
-  //     .json({type, id})
-  // })
+    res
+      .status(200)
+      .json({type, id})
+  })
 
 module.exports = usersRouter;
