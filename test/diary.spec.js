@@ -60,4 +60,29 @@ describe.only('Diary Endpoint', () => {
     });
   });
 
+  describe('PUT /:student_id/:entry_id', () => {
+    let entry_id;
+
+    before((done) => {
+      authenticatedUser
+        .set('authorization', `bearer ${authToken}`)
+        .get('/api/diary/17')
+        .then((response) => {
+          entry_id = response.body[0].id;
+          done();
+        })
+    })
+
+    it('responds with 204', () => {
+      const updatedEntry = {
+        comment: "Let's test this endpoint and update the comment for this entry."
+      };
+
+      return authenticatedUser
+        .set('authorization', `bearer ${authToken}`)
+        .put(`/api/diary/17/${entry_id}`)
+        .send(updatedEntry)
+        .expect(204)
+    });
+  });
 });
