@@ -40,6 +40,12 @@ const DiaryService = {
       );
   },
 
+  deleteEntry(db, entry_id) {
+    return db('diary')
+      .where('id', entry_id)
+      .delete();
+  },
+
 };
 
 module.exports = DiaryService;

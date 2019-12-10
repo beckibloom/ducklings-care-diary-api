@@ -43,6 +43,13 @@ diaryRouter
   .get((req,res) => {
     res.status(200).json(DiaryService.serializeEntry(res.entry));
   })
+  .delete((req,res,next) => {
+    DiaryService.deleteEntry(req.app.get('db'), req.params.entry_id)
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
+  })
 
   async function checkEntryExists(req, res, next) {
     try {
