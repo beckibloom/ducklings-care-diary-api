@@ -20,7 +20,7 @@ let authToken;
 
 const authenticatedUser = request.agent(app);
 
-describe.only(`Students Endpoint`, () => {
+describe(`Students Endpoint`, () => {
 
   before((done) => {
     authenticatedUser
