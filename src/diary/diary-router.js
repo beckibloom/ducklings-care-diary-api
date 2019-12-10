@@ -36,4 +36,32 @@ diaryRouter
       .catch(next);
   });
 
-  module.exports = diaryRouter;
+diaryRouter
+  .route('/:student_id/:entry_id')
+  .all(requireAuth)
+  .all(checkEntryExists)
+  .get((req,res) => {
+    res.status(200).json(DiaryService.serializeEntry(res.entry));
+  })
+
+  async function checkEntryExists(req, res, next) {
+    try {
+      const entry = await DiaryService.getById(
+        req.app.get('db'),
+        req.params.entry_id
+      );
+  
+      if (!entry) {
+        return res.status(404).json({
+          error: `Entry doesn't exist`
+        })
+      };
+  
+      res.entry = entry;
+      next();
+    } catch (error) {
+      next(error);
+    };
+  };
+  
+module.exports = diaryRouter;
