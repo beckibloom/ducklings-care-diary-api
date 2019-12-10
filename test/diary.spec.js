@@ -85,4 +85,25 @@ describe.only('Diary Endpoint', () => {
         .expect(204)
     });
   });
+
+  describe('DELETE /:student_id/:entry_id', () => {
+    let entry_id;
+
+    before((done) => {
+      authenticatedUser
+        .set('authorization', `bearer ${authToken}`)
+        .get('/api/diary/17')
+        .then((response) => {
+          entry_id = response.body[0].id;
+          done();
+        })
+    })
+
+    it('responds with status 204 and activity is no longer in database', () => {
+      return authenticatedUser
+        .set('authorization', `bearer ${authToken}`)
+        .delete(`/api/diary/17/${entry_id}`)
+        .expect(204)
+    });
+  });
 });
