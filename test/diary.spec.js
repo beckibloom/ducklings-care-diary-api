@@ -32,7 +32,7 @@ describe.only('Diary Endpoint', () => {
       })
   })
 
-  //GET /:student_id only tested with student_id 12
+  //GET /:student_id only test with student_id 12
   describe('GET /:student_id', () => {
     it('responds with 200 and diary entries for given student_id', () => {
       const expectedEntries = helpers.makeExpectedEntries();
@@ -41,6 +41,22 @@ describe.only('Diary Endpoint', () => {
         .get('/api/diary/12')
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(200, expectedEntries)
+    });
+  });
+
+  //POST /:student_id only test with student_id 17
+  describe('POST /:student_id', () => {
+    it('responds with 201 and the diary entry added', () => {
+      return authenticatedUser
+        .set('authorization', `bearer ${authToken}`)
+        .post('/api/diary/17')
+        .send({
+          student_id: 17,
+          date: new Date(),
+          comment: "This is a test note for Bobby."
+        })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(201)
     });
   });
 
