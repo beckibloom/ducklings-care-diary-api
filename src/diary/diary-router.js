@@ -43,6 +43,27 @@ diaryRouter
   .get((req,res) => {
     res.status(200).json(DiaryService.serializeEntry(res.entry));
   })
+  .put(jsonBodyParser, (req,res,next) => {
+    const {student_id, date, comment} = req.body;
+    const entryToUpdate = {student_id, date, comment};
+
+    const numberOfValues = Object.values(entryToUpdate).filter(Boolean).length;
+    if(numberOfValues === 0) {
+      return res.status(400).json({
+        error:{message:`Request body must contain an entry object value to update`}
+      });
+    };
+
+    DiaryService.updateEntry(
+      req.app.get('db'),
+      req.params.entry_id,
+      entryToUpdate
+    )
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
+  })
   .delete((req,res,next) => {
     DiaryService.deleteEntry(req.app.get('db'), req.params.entry_id)
       .then(numRowsAffected => {

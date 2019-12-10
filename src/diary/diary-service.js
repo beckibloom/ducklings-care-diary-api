@@ -46,6 +46,12 @@ const DiaryService = {
       .delete();
   },
 
+  updateEntry(db, id, newEntryFields) {
+    return db('diary')
+      .where({id})
+      .update(newEntryFields);
+  },
+
 };
 
 module.exports = DiaryService;
