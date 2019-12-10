@@ -10,6 +10,7 @@ studentsRouter
   .all(requireAuth)
   // GET all students assigned to the specified teacher ('/:teacher_id')
   .get(jsonBodyParser, (req,res,next) => {
+    const teacherId = req.params.teacher_id;
     StudentsService.getStudentsByTeacherId(req.app.get('db'), teacherId)
       .then(students => {
         res.status(200).json(students);
