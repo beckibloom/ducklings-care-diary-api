@@ -24,30 +24,33 @@ After parents have been entered by the teacher, parents can view their student's
 
 /api
 .
---/activities
-  --GET
-    -/:org_id
-    -/:org_id/:activity_id
-  --DELETE
-    -/:org_id/:activity_id
-  --PUT
-    -/:org_id/:activity_id
-  --POST
-    -/:org_id
 --/auth
     --POST
       -/login
---/orgs
-    --GET
-      -/
-    --POST
-      -/
 --/users
-    --GET
-      -/orgID
-      -/:username
     --POST
-      -/:org_id
+      -/
+--/students
+    --GET
+      -/:teacher_id
+      -/:teacher_id/:student_id
+    --POST
+      -/:teacher_id
+    --PUT
+      -/:teacher_id/:student_id
+    --DELETE
+      -/:teacher_id/:student_id      
+--/diary
+    --GET
+      -/:student_id
+      -/:student_id/:entry_id
+    --POST
+      -/:student_id
+    --PUT
+      -/:student_id/:entry_id
+    --DELETE
+      -/:student_id/:entry_id
+
 
 ```
 
