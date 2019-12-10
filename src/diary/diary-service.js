@@ -1,6 +1,12 @@
 const xss = require('xss');
 
 const DiaryService = {
+  getAllDiaries(db) {
+    return db
+      .from('diary')
+      .select('*')
+  },
+
   getStudentDiary(db, student_id) {
     return db
       .from('diary')
@@ -17,7 +23,22 @@ const DiaryService = {
     };
   },
 
-  
+  getById(db, id) {
+    return DiaryService.getAllDiaries(db)
+      .where('id', id)
+      .first();
+  },
+
+  insertEntry(db, entry) {
+    return db
+      .insert(entry)
+      .into('diary')
+      .returning('*')
+      .then(([entry]) => entry)
+      .then(entry =>
+        DiaryService.getById(db, entry.id)
+      );
+  },
 
 };
 
