@@ -82,6 +82,8 @@ studentsRouter
       .catch(next);
   })
 
+//ADD ENDPOINT: given parent email, GET student data, returning {id, teacher_id}
+
 async function checkStudentExists(req, res, next) {
   try {
     const student = await StudentsService.getByStudentId(

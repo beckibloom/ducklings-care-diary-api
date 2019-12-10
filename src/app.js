@@ -34,9 +34,9 @@ const errorHandler = (error, req, res, next) => {
   res.status(500).json(response);
 }
 
-app.get('/api/*', (req, res) => {
-    res.json({ok: true});
-});
+// app.get('/api/*', (req, res) => {
+//     res.json({ok: true});
+// });
 
 app.use(errorHandler);
 
