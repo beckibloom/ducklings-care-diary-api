@@ -30,6 +30,8 @@ After parents have been entered by the teacher, parents can view their student's
 --/users
     --POST
       -/
+    --GET
+      -/data
 --/students
     --GET
       -/:teacher_id
