@@ -8,6 +8,14 @@ const StudentsService = {
       .from('students')
   },
 
+  getStudentByParent(db, parent_email) {
+    return db
+      .select('*')
+      .where({parent_email})
+      .from('students')
+      .first()
+  },
+
   serializeStudent(student) {
     return {
       id: student.id,

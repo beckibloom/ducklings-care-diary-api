@@ -6,6 +6,17 @@ const studentsRouter = express.Router();
 const jsonBodyParser = express.json();
 
 studentsRouter
+  .route('/')
+  .all(requireAuth)
+  .get(requireAuth, jsonBodyParser, (req,res,next) => {
+    const parent_email = req.user.username;
+    StudentsService.getStudentByParent(req.app.get('db'), parent_email)
+      .then(student => {
+        res.status(200).json(student)
+      })
+  });
+
+studentsRouter
   .route('/:teacher_id')
   .all(requireAuth)
   // GET all students assigned to the specified teacher ('/:teacher_id')
