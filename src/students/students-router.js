@@ -53,7 +53,7 @@ studentsRouter
   });
 
 studentsRouter
-  .route('/:teacher_id/:student_id')
+  .route('/id/:student_id')
   .all(requireAuth)
   .all(checkStudentExists)
   // GET profile data for specified student ('/:teacher_id/:student_id')

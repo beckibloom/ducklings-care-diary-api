@@ -4,6 +4,10 @@ const request = require('supertest');
 const knex = require('knex');
 const helpers = require('./test-helpers');
 
+function createId() {
+  return Math.random().toString(36).substr(2, 9);
+}
+
 describe('Users Endpoints', () => {
   const db = knex({
     client: 'pg',
@@ -24,8 +28,10 @@ describe('Users Endpoints', () => {
   context('Given user is not authenticated', () => {
     describe(`POST /users`, () => {
       it(`creates a user, responding with 201`, () => {
+        const username = createId();
+
         const testUser = {
-          username: 'TestUser@email.com',
+          username: username,
           password: 'MyP@ssw0rd',
           type: 'parent'
         };

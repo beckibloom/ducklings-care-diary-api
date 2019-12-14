@@ -36,13 +36,13 @@ After parents have been entered by the teacher, parents can view their student's
     --GET
       -/
       -/:teacher_id
-      -/:teacher_id/:student_id
+      -/id/:student_id
     --POST
       -/:teacher_id
     --PUT
-      -/:teacher_id/:student_id
+      -/id/:student_id
     --DELETE
-      -/:teacher_id/:student_id      
+      -/id/:student_id      
 --/diary
     --GET
       -/:student_id

@@ -20,7 +20,7 @@ let authToken;
 
 const authenticatedUser = request.agent(app);
 
-describe(`Students Endpoint`, () => {
+describe(`Students Endpoint (as teacher)`, () => {
 
   before((done) => {
     authenticatedUser
@@ -34,9 +34,9 @@ describe(`Students Endpoint`, () => {
 
   context('Interacting with all students belonging to a teacher_id', () => {
     describe('GET /:teacher_id', () => {
-      //should only interact with teacherId 5
+      //should only interact with teacherId 12
       it('responds with 200 and all students associated with the teacher_id', () => {
-        const teacherId = 5;
+        const teacherId = 12;
         const expectedStudents = helpers.makeExpectedStudents();
 
         return authenticatedUser
@@ -70,33 +70,25 @@ describe(`Students Endpoint`, () => {
   });
 
   context('Interacting with a single student', () => {
-    describe('GET /:teacher_id/:student_id', () => {
+    const expectedStudent = {
+      id: 21,
+      teacher_id: 5,
+      student_first: 'Charlie',
+      student_last: 'Jarvis',
+      birth_date: '11/19/2016',
+      parent_email: 'newparent@email.com'
+    }
+    
+    describe('GET /id/:student_id', () => {
       it('responds with 200 and the expected student', () => {
-        const expectedStudent = {
-          id: 21,
-          teacher_id: 5,
-          student_first: 'Charlie',
-          student_last: 'Jarvis',
-          birth_date: '11/19/2016',
-          parent_email: 'newparent@email.com'
-        }
         return authenticatedUser
           .set('authorization', `bearer ${authToken}`)
-          .get(`/api/students/${expectedStudent.teacher_id}/${expectedStudent.id}`)
+          .get(`/api/students/id/${expectedStudent.id}`)
           .expect('Content-Type', 'application/json; charset=utf-8')
           .expect(200, expectedStudent)
       });
     });
-    describe('GET /', () => {
-      it('responds with 200 and gets expected student by parent email', () => {
-        return authenticatedUser
-          .set('authorization', `bearer ${authToken}`)
-          .get(`/api/students/`)
-          .expect('Content-Type', 'application/json; charset=utf-8')
-          .expect(200, expectedStudent)
-      });
-    });
-    describe('PUT /:teacher_id/:student_id', () => {
+    describe('PUT /id/:student_id', () => {
       let studentId;
       //must only interact with teacher_id 8
       before((done) => {
@@ -119,13 +111,14 @@ describe(`Students Endpoint`, () => {
 
         return authenticatedUser
           .set('authorization', `bearer ${authToken}`)
-          .put(`/api/students/8/${studentId}`)
+          .put(`/api/students/id/${studentId}`)
           .send(updatedStudent)
           .expect(204)
       })
     });
-    describe('DELETE /:teacher_id/:student_id', () => {
+    describe('DELETE /id/:student_id', () => {
       let studentIdToDelete;
+      const expectedStudents = []
 
       //must only interact with teacher_id 8
       before((done) => {
@@ -138,14 +131,18 @@ describe(`Students Endpoint`, () => {
           });
       });    
       
-      // Not sure which way is best to specify a parent user for this test.
-      
-      // it('responds with status 204 and activity is no longer in database', () => {
-      //   return authenticatedUser
-      //     .set('authorization', `bearer ${authToken}`)
-      //     .delete(`/api/students/8/${studentIdToDelete}`)
-      //     .expect(204)
-      // });
+      it('responds with status 204 and student is no longer in database', () => {
+        return authenticatedUser
+          .set('authorization', `bearer ${authToken}`)
+          .delete(`/api/students/id/${studentIdToDelete}`)
+          .expect(204)
+          .then(() => {
+            authenticatedUser
+              .set('authorization', `bearer ${authToken}`)
+              .get(`/api/students/8`)
+              .expect(expectedStudents)
+          })
+      });
     });
   });
 });
