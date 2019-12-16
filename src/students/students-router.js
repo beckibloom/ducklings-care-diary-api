@@ -12,6 +12,9 @@ studentsRouter
     const parent_email = req.user.username;
     StudentsService.getStudentByParent(req.app.get('db'), parent_email)
       .then(student => {
+        if (!student) {
+          res.status(200).json({id: 0})
+        }
         res.status(200).json(student)
       })
   });
