@@ -14,9 +14,9 @@ Sending home classroom reports on paper can create quite a hassle. Ducklings Car
 
 Teachers are able to create their class and register their students, maintaining a diary for each student containing notes on their activities or progress each day.
 
-After parents have been entered by the teacher, parents can view their student's diary and see their growth based on the teacher's notes over time.
+After parents emails have been entered by the teacher, parents can view their student's diary and see their growth based on the teacher's notes over time.
 
-> View the Client Repo for Activities Assistant [here](https://github.com/beckibloom/ducklings-care-diary-client)
+> View the Client Repo for Ducklings Care Diary [here](https://github.com/beckibloom/ducklings-care-diary-client)
 
 ## API - UPDATE ENDPOINTS
 
