@@ -18,7 +18,7 @@ usersRouter
     const typeError = UsersService.validateType(type);
     if (typeError) {
       return res.status(400).json({ error: typeError });
-    }
+    };
   
     const passwordError = UsersService.validatePassword(password);
 
@@ -62,7 +62,7 @@ usersRouter
 
     res
       .status(200)
-      .json({type, id})
+      .json({type, id});
   })
 
 module.exports = usersRouter;

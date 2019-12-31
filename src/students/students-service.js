@@ -5,7 +5,7 @@ const StudentsService = {
     return db
       .select('*')
       .where({teacher_id})
-      .from('students')
+      .from('students');
   },
 
   getStudentByParent(db, parent_email) {
@@ -13,7 +13,7 @@ const StudentsService = {
       .select('*')
       .where({parent_email})
       .from('students')
-      .first()
+      .first();
   },
 
   serializeStudent(student) {
@@ -24,7 +24,7 @@ const StudentsService = {
       student_last: xss(student.student_last),
       birth_date: xss(student.birth_date),
       parent_email: xss(student.parent_email),
-    }
+    };
   },
 
   insertStudent(db, newStudent) {
@@ -49,7 +49,7 @@ const StudentsService = {
   updateStudent(db, student_id, updatedFields) {
     return db('students')
       .where('id', student_id)
-      .update(updatedFields)
+      .update(updatedFields);
   },
 
   deleteStudent(db, student_id) {

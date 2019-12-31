@@ -4,14 +4,14 @@ const DiaryService = {
   getAllDiaries(db) {
     return db
       .from('diary')
-      .select('*')
+      .select('*');
   },
 
   getStudentDiary(db, student_id) {
     return db
       .from('diary')
       .select('*')
-      .where({student_id})
+      .where({student_id});
   },
 
   serializeEntry(entry) {

@@ -20,7 +20,7 @@ const UsersService = {
   validateType(type) {
     if (type !== 'parent' && type !== 'teacher') {
       return `Type must be either 'parent' or 'teacher'`
-    }
+    };
   },
   validatePassword(password) {
     if (password.length < 8) {
